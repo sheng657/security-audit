@@ -283,3 +283,4 @@ cp -r security-audit/ ~/.hermes/skills/security-audit/
 ## 📄 License
 
 MIT License — 详见 [LICENSE](LICENSE) 文件
+
