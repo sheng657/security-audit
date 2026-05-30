@@ -22,30 +22,30 @@ from typing import Optional
 SECRET_PATTERNS = [
     # ---- AWS ----
     ("AWS Access Key", r'(?<![A-Z0-9])AKIA[0-9A-Z]{16}(?![A-Z0-9])', "CRITICAL", "CWE-798"),
-    ("AWS Secret Key", r'(?:aws_secret_access_key|AWS_SECRET)\s*[=:]\s*["\']?([A-Za-z0-9/+=]{40})["\']?', "CRITICAL", "CWE-798"),
+    ("AWS Secret Key", r'(?:aws_secret_access_key|AWS_SECRET)\s*[=:]\s*["\']?([a-zA-Z0-9/+=]{40})["\']?', "CRITICAL", "CWE-798"),
     ("AWS MWS Key", r'amzn\.mws\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', "CRITICAL", "CWE-798"),
 
     # ---- GitHub ----
-    ("GitHub Token", r'ghp_[A-Za-z0-9]{36}', "CRITICAL", "CWE-798"),
-    ("GitHub OAuth", r'gho_[A-Za-z0-9]{36}', "CRITICAL", "CWE-798"),
-    ("GitHub Fine-grained", r'github_pat_[A-Za-z0-9_]{82}', "CRITICAL", "CWE-798"),
-    ("GitHub App Token", r'(ghu|ghs)_[A-Za-z0-9]{36}', "CRITICAL", "CWE-798"),
+    ("GitHub Token", r'ghp_[a-zA-Z0-9]{36}', "CRITICAL", "CWE-798"),
+    ("GitHub OAuth", r'gho_[a-zA-Z0-9]{36}', "CRITICAL", "CWE-798"),
+    ("GitHub Fine-grained", r'github_pat_[a-zA-Z0-9_]{82}', "CRITICAL", "CWE-798"),
+    ("GitHub App Token", r'(ghu|ghs)_[a-zA-Z0-9]{36}', "CRITICAL", "CWE-798"),
 
     # ---- GitLab ----
-    ("GitLab Token", r'glpat-[A-Za-z0-9\-_]{20,}', "CRITICAL", "CWE-798"),
-    ("GitLab Pipeline Token", r'glptt-[A-Za-z0-9\-_]{20,}', "CRITICAL", "CWE-798"),
+    ("GitLab Token", r'glpat-[a-zA-Z0-9\-_]{20,}', "CRITICAL", "CWE-798"),
+    ("GitLab Pipeline Token", r'glptt-[a-zA-Z0-9\-_]{20,}', "CRITICAL", "CWE-798"),
 
     # ---- Slack ----
     ("Slack Token", r'xox[baprs]-[0-9]{10,}(-[a-zA-Z0-9]+)*', "CRITICAL", "CWE-798"),
     ("Slack Webhook", r'https://hooks\.slack\.com/services/T[A-Z0-9]+/B[A-Z0-9]+/[a-zA-Z0-9]+', "HIGH", "CWE-798"),
-    ("通用 API Key (sk-前缀)", r'(?<![A-Za-z0-9])sk-[a-f0-9]{32}(?![a-Za-z0-9])', "CRITICAL", "CWE-798"),
+    ("通用 API Key (sk-前缀)", r'(?<![a-zA-Z0-9])sk-[a-f0-9]{32}(?![a-zA-Z0-9])', "CRITICAL", "CWE-798"),
 
     # ---- Google ----
-    ("Google API Key", r'AIza[0-9A-Za-z\-_]{35}', "HIGH", "CWE-798"),
-    ("Google OAuth", r'[0-9]+-[0-9A-Za-z_]{32}\.apps\.googleusercontent\.com', "HIGH", "CWE-798"),
+    ("Google API Key", r'AIza[0-9a-zA-Z\-_]{35}', "HIGH", "CWE-798"),
+    ("Google OAuth", r'[0-9]+-[0-9a-zA-Z_]{32}\.apps\.googleusercontent\.com', "HIGH", "CWE-798"),
 
     # ---- Azure ----
-    ("Azure Storage Account Key", r'DefaultEndpointsProtocol=https;AccountName=[^;]+;AccountKey=[A-Za-z0-9+/=]{88}', "CRITICAL", "CWE-798"),
+    ("Azure Storage Account Key", r'DefaultEndpointsProtocol=https;AccountName=[^;]+;AccountKey=[a-zA-Z0-9+/=]{88}', "CRITICAL", "CWE-798"),
 
     # ---- 通用密钥/密码 ----
     ("硬编码密码（变量赋值）", r'(?i)(password|passwd|pwd|secret|token|api_key|apikey|api_secret|access_key|auth_token|private_key)\s*[=:]\s*["\']([^"\']{6,})["\']', "HIGH", "CWE-798"),
@@ -62,11 +62,11 @@ SECRET_PATTERNS = [
 
     # ---- JWT ----
     ("JWT 密钥硬编码", r'(?i)(jwt[_\-]?(?:secret|key)|JWT[_\-]?(?:SECRET|KEY))\s*[=:]\s*["\']([^"\']{8,})["\']', "HIGH", "CWE-798"),
-    ("JWT 在代码中", r'eyJ[A-Za-z0-9\-_]+\.eyJ[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_.+/=]+', "MEDIUM", "CWE-798"),
+    ("JWT 在代码中", r'eyJ[a-zA-Z0-9\-_]+\.eyJ[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_.+/=]+', "MEDIUM", "CWE-798"),
 
     # ---- npm / PyPI / NuGet ----
-    ("npm Token", r'npm_[A-Za-z0-9]{36}', "CRITICAL", "CWE-798"),
-    ("PyPI Token", r'pypi-[A-Za-z0-9\-_]{50,}', "CRITICAL", "CWE-798"),
+    ("npm Token", r'npm_[a-zA-Z0-9]{36}', "CRITICAL", "CWE-798"),
+    ("PyPI Token", r'pypi-[a-zA-Z0-9\-_]{50,}', "CRITICAL", "CWE-798"),
 
     # ---- Twilio ----
     ("Twilio API Key", r'SK[0-9a-fA-F]{32}', "HIGH", "CWE-798"),
@@ -77,16 +77,16 @@ SECRET_PATTERNS = [
     ("Stripe Publishable Key", r'pk_live_[0-9a-zA-Z]{24,}', "MEDIUM", "CWE-798"),
 
     # ---- SendGrid ----
-    ("SendGrid API Key", r'SG\.[A-Za-z0-9\-_]{22,}\.[A-Za-z0-9\-_]{43,}', "CRITICAL", "CWE-798"),
+    ("SendGrid API Key", r'SG\.[a-zA-Z0-9\-_]{22,}\.[a-zA-Z0-9\-_]{43,}', "CRITICAL", "CWE-798"),
 
     # ---- Telegram ----
-    ("Telegram Bot Token", r'[0-9]{9}:[A-Za-z0-9_\-]{35}', "HIGH", "CWE-798"),
+    ("Telegram Bot Token", r'[0-9]{9}:[a-zA-Z0-9_\-]{35}', "HIGH", "CWE-798"),
 
     # ---- 微信 ----
     ("微信 AppSecret", r'(?i)(app_?secret|wx_?secret|wechat_?secret)\s*[=:]\s*["\']?([a-f0-9]{32})["\']?', "HIGH", "CWE-798"),
 
     # ---- 阿里云 ----
-    ("阿里云 AccessKey", r'LTAI[0-9A-Za-z]{12,20}', "CRITICAL", "CWE-798"),
+    ("阿里云 AccessKey", r'LTAI[0-9a-zA-Z]{12,20}', "CRITICAL", "CWE-798"),
 ]
 
 # 需要排除的文件/目录

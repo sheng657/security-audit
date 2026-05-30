@@ -189,6 +189,16 @@ OWASP 分类: A03:2021 - Injection
 
 **pitfall**: execute_code 中调用 search_files 处理含中文路径的 WSL 项目时，可能因 JSON 解析失败报错。改用 terminal + grep 更可靠。
 
+**pitfall**: 三个扫描脚本的 CLI 接口不一致！`secret-scan.py` 支持 `--exclude` 参数排除目录，但 `sql-inject-check.py` 和 `dep-scan.py` **不支持** `--exclude`。对 sql-inject-check.py 和 dep-scan.py 只需传目录参数即可（它们内置了排除规则）。如果传了不支持的参数会直接报错退出。
+
+**pitfall**: 扫描工具的误报率极高，必须人工复核。典型误报模式：
+- **硬编码密钥误报**: 示例值（`your-key-here`）、占位符（`no-key-required`、`aws-sdk`）、国际化翻译文件中的 `secret`/`密码` 翻译、文档中的 `ghp_...` 示例
+- **SQL注入误报**: 使用硬编码表名/触发器名的 f-string（非用户输入）、`_wrap_panel_text()` 等文本格式化函数被误判为 SQLAlchemy text() 拼接
+- **Twilio SID 误报**: 以 `AC` 开头的区块链合约地址（如 USDT 的 `0xdAC17F958D2ee523...`）会被正则误匹配
+- **shell=True 误报**: skills_guard.py 中的检测规则引用、注释中的说明文字
+
+正确做法：先跑工具拿原始数据，然后用 `is_likely_false_positive()` 逻辑或人工判断过滤。报告中应分两列呈现——"工具报告数"和"实际确认数"。
+
 ### 第三步：人工复核 + 补充
 
 自动化工具无法覆盖的项目：
